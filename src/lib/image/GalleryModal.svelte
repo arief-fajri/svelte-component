@@ -2,8 +2,6 @@
   import { fade } from 'svelte/transition';
   import moment from "moment";
 
-  import { innerWidth } from '../stores';
-
   export let visible;
   export let data = [];
 
@@ -19,6 +17,7 @@
   let showControls = true;
   let showControlsTimeout;
   
+  let innerWidth 
   // assign or remove preview based on visibility
   $: if (!visible) {
     preview = null;
@@ -85,6 +84,8 @@
   };
 </script>
 
+<svelte:window bind:innerWidth={innerWidth}/>
+
 <div
   class="overlay"
   class:not-visible={!visible}
@@ -115,6 +116,7 @@
             <track kind="captions" />
           </video>
           {#if duration && preview.type === "video_cloudinary"}
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
             <div class="play-pause vidicon" class:invisible={!paused} on:click={() => togglePlay(videoPlayer)}>
               <svg class="playback-icons">
                 <use href="#play-icon" />
@@ -136,6 +138,7 @@
   {#if data.length > 1}
     <div class="thumbnail {maxWidth} mx-auto flex items-center gap-3 overflow-x-auto p-4 pt-0" bind:clientWidth={width}>
       {#each data as p}
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
         <div class="w-[160px] aspect-[4/3] flex-none overflow-hidden" on:click={() => {
             if(videoPlayer) videoPlayer.pause()
             preview = null
